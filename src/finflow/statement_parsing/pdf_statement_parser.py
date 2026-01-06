@@ -7,11 +7,9 @@ import logging
 import pandas as pd
 from PyPDF2 import PdfReader
 
+from src.finflow.constants import DATA_FOLDER_ENV
 from src.finflow.statement_parsing.transaction_patterns import TRANSACTION_PATTERNS
 from src.finflow.statement_parsing.transaction_types import TransactionType
-
-
-DATA_FOLDER_ENV: str = "DATA_FOLDER"
 
 
 class PDFTransactionParser:
@@ -59,11 +57,12 @@ class PDFTransactionParser:
             If the environment variable DATA_FOLDER is not set.
         """
         base_folder = os.getenv(DATA_FOLDER_ENV)
+
         if not base_folder:
             raise ValueError(f"Environment variable {DATA_FOLDER_ENV} is not set")
 
-        base_path: Path = Path(base_folder).expanduser().resolve()
-        self.source_folder: Path = (base_path / source_folder).resolve()
+        self.base_path: Path = Path(base_folder).expanduser().resolve()
+        self.source_folder: Path = (self.base_path / source_folder).resolve()
 
         self.transactions: pd.DataFrame = pd.DataFrame()
 
@@ -238,10 +237,9 @@ class PDFTransactionParser:
         self.logger.info(f"Total transactions parsed: {len(self.transactions)}")
 
         if output_csv is not None:
-            output_csv = Path(output_csv).expanduser().resolve()
-            output_csv.parent.mkdir(parents=True, exist_ok=True)
-            self.transactions.to_csv(output_csv, index=False)
-            self.logger.info(f"Saved transactions to {output_csv}")
+            path_to_output_csv = self.base_path / output_csv
+            self.transactions.to_csv(path_to_output_csv, index=False)
+            self.logger.info(f"Saved transactions to {path_to_output_csv}")
 
         return self.transactions
 

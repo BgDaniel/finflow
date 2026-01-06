@@ -5,15 +5,6 @@ from src.finflow.statement_parsing.transaction_types import TransactionType
 
 TRANSACTION_PATTERNS = {
     TransactionType.DIRECT_DEBIT: [
-        #re.compile(
-        #    r"(\d{2}\.\d{2}\.\d{4})\n"  # Booking date
-        #    r"(\d{2}\.\d{2}\.\d{4})Lastschrift /\nBelastung\n"  # Value date / Charge
-        #    r"([A-Z0-9]+)\n"  # Transaction ID
-        #    r"((?:[A-Z0-9]+/\d+ ?)+)"   # Codes (numeric after /)
-        #    r"(\s*[\s\S]+?)\n"  # Description (multi-line)
-        #    r"(-?\d{1,3}(?:\.\d{3})*,\d{2})\n",  # Amount (own line)
-        #    re.DOTALL,
-        #),
         re.compile(
             r"(\d{2}\.\d{2}\.\d{4})\r?\n"  # Booking date
             r"(\d{2}\.\d{2}\.\d{4})Lastschrift /\r?\nBelastung\r?\n"  # Value date / Charge

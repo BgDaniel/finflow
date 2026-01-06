@@ -1,0 +1,1 @@
+DATA_FOLDER_ENV: str = "DATA_FOLDER"
